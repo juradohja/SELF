@@ -1,4 +1,8 @@
-
+import processing.sound.*;
+Pulse pulseleft;
+Pulse pulseright;
+SoundFile soundleft;
+SoundFile soundright;
 
 Frequency left; // frecuencia para el canal izquierdo
 Frequency right; // frecuencia para el canal derecho
@@ -15,17 +19,22 @@ PFont font;
 
 void setup() {
   size(225, 400);
-  left = new Frequency(3, -13);
+  left = new Frequency(9, -15);
   right = new Frequency(9, -14);
   background(0);
   mbleft=new ArrayList<Musicbar>();
   mbright=new ArrayList<Musicbar>();
   font=createFont("Trebuchet MS", 25);
+  soundleft=new SoundFile(this, "ElevatorDing.wav");
+  soundright=new SoundFile(this, "AirplaneDing.wav");
+  soundleft.pan(-1.0);
+  soundright.pan(1.0);
 }
 
 void draw() {
   background(0);
-  System.out.println(left.getPeriod()+" "+right.getPeriod());
+  //  System.out.println(left.getPeriod()+" "+right.getPeriod());
+  System.out.println(soundleft.channels()+" "+soundright.channels());
   if (millis()/left.getPeriod()>tl) {
     tl++;
     mbleft.add(new Musicbar(1, left.getPeriod()));
@@ -48,6 +57,7 @@ void draw() {
       mb.updateHeight();
       mb.drawBar();
       if (mb.hasReachedEnd()==true) {
+        soundleft.play();
         mbleft.remove(i);
         i--;
       }
@@ -60,6 +70,7 @@ void draw() {
       mb.updateHeight();
       mb.drawBar();
       if (mb.hasReachedEnd()==true) {
+        soundright.play();
         mbright.remove(i);
         i--;
       }
